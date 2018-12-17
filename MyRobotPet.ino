@@ -28,12 +28,17 @@ PubSubClient client(espClient);
 //int value = 0;
 char msgfromAnd[60];
 char msgtoAnd[40];
+char msgDeface[40];
 byte *msgfromPy;
 
 uint8_t
 BeControlled = 0, 
 neckcon = 0,
-facecon = 0;
+facecon = 0,
+Deface = 0;
+
+int U_D = 0 ,
+L_R = 0;
 
 #define CLK     D2     
 #define CS        D3    
@@ -347,7 +352,7 @@ unsigned long checkMillis, touchMillis, nowMillis;
 
 
 void setup()
-{
+{   
 	Serial.begin(115200);
 	
 	setup_wifi();
@@ -401,7 +406,14 @@ void Receive(char* topic, byte* payload, unsigned int length) {
 		}
 		decodeJson(msgfromAnd);
 	}
-
+else if (!strcmp(topic,"DeFace")){
+    
+    for (int i = 0; i < length; i++){
+        msgDeface[i] = payload[i];
+    }
+    decode_DeFace_Json(msgDeface)
+  
+  }
 	else {
 		delete msgfromPy;
 		msgfromPy = new byte[300];
@@ -430,6 +442,21 @@ void decodeJson(char msg[]) {
 	Serial.print("facecon:");
 	Serial.println(facecon);
 }
+void decode_DeFace_Json(char msg[]){
+  //专门用来解析来自人脸识别控制的json
+  DynamicJsonBuffer jsonBuffer;
+  JsonObject& root = jsonBuffer.parseObject(msg);
+  U_D = root["U_D"];
+  L_R = root["L_R"];
+  Deface = root["Deface"];
+  Serial.print("Deface");
+  Serial.print(Deface);
+  Serial.print("L_R");
+  Serial.print(L_R);
+  Serial.print("U_D");
+  Serial.print(U_D);
+  
+  }
 void encodeJson() {
 	DynamicJsonBuffer jsonBuffer;
 	JsonObject& root1 = jsonBuffer.createObject();
@@ -505,6 +532,8 @@ void MoveGaze()
 	}
 	else {
 		GazeAprh(gazeX, gazeY);
+   if(Deface==0)
+   //没有检测到人脸就传统模式
 		MoveNeck();
 
 	}
@@ -597,6 +626,35 @@ void CheckTouch()
       Serial.println(TouchReact);
 }
 
+void Follow_Face(){
+
+      //检测到了人脸
+      //首先要判断上下还是左右
+      //如何提取出绝对值
+      //正常：上下120‘左右，左右90
+      //暂时设定成除以10’
+    int face_LR=0,face_UD=0;
+      //首先左右
+      if(L_R>0){
+        //左边旋转
+        myser.write(90+L_R/10);
+        }else {
+         myser.write(90+L_R/10);
+        }
+      if(U_D>0){
+        //左边旋转
+        myser.write(90+U_D/10);
+        }else {
+         myser.write(90+U_D/10);
+        }
+    
+       
+     
+}
+
+
+
+
 void loop()
 {
 	if (!client.connected()) {
@@ -604,11 +662,15 @@ void loop()
 	}
 	client.loop();
 	encodeJson();
+ //下面这句不能去掉
 	client.publish("NodeToAnd", msgtoAnd);
 	if (!BeControlled)
 	{
 		BlinkFace();
 		MoveGaze();
+   if(Deface==1){
+      Follow_Face();
+    }
 		touchMillis = millis();
 		while (millis() - touchMillis < 40)
 		{
