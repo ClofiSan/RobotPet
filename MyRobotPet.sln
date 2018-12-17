@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MyRobotPet", "MyRobotPet.vcxproj", "{EFDA307C-FAF0-4421-8F63-7CB121B924C0}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MyMqtt", "..\MyMqtt\MyMqtt.vcxproj", "{8DA0DF74-6383-4915-B837-B25DF4212D1C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EFDA307C-FAF0-4421-8F63-7CB121B924C0}.Debug|x86.ActiveCfg = Debug|Win32
+		{EFDA307C-FAF0-4421-8F63-7CB121B924C0}.Debug|x86.Build.0 = Debug|Win32
+		{EFDA307C-FAF0-4421-8F63-7CB121B924C0}.Release|x86.ActiveCfg = Release|Win32
+		{EFDA307C-FAF0-4421-8F63-7CB121B924C0}.Release|x86.Build.0 = Release|Win32
+		{8DA0DF74-6383-4915-B837-B25DF4212D1C}.Debug|x86.ActiveCfg = Debug|Win32
+		{8DA0DF74-6383-4915-B837-B25DF4212D1C}.Debug|x86.Build.0 = Debug|Win32
+		{8DA0DF74-6383-4915-B837-B25DF4212D1C}.Release|x86.ActiveCfg = Release|Win32
+		{8DA0DF74-6383-4915-B837-B25DF4212D1C}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
